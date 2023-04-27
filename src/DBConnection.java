@@ -8,7 +8,7 @@ public class DBConnection {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/news",
-                    "root", "peter2192003");
+                    "root", "password");
 
             //ResultSet resultSet = statement.executeQuery("Select * from news.user");
 
