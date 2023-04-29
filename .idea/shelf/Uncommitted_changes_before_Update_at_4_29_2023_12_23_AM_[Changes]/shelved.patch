@@ -1,0 +1,102 @@
+Index: src/User.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/User.java b/src/User.java
+new file mode 100644
+--- /dev/null	(date 1682720540157)
++++ b/src/User.java	(date 1682720540157)
+@@ -0,0 +1,46 @@
++import java.util.ArrayList;
++
++public class User {
++    private String UserName;
++    private String password;
++
++    private ArrayList<Category> preferences;
++    private boolean isAdmin;
++
++    public User(String UserName,String password,boolean isAdmin) {
++        this.UserName = UserName;
++        this.password = password;
++        this.isAdmin = isAdmin;
++    }
++    public void setUserName(String userName) {
++        UserName = userName;
++    }
++
++    public String getUserName() {
++        return UserName;
++    }
++
++    public void setPassword(String password) {
++        this.password = password;
++    }
++
++    public String getPassword() {
++        return password;
++    }
++
++    public ArrayList<Category> getPreferences() {
++        return preferences;
++    }
++
++    public void setPreferences(ArrayList<Category> preferences) {
++        this.preferences = preferences;
++    }
++
++    public boolean isAdmin() {
++        return isAdmin;
++    }
++
++    public void setAdmin(boolean admin) {
++        isAdmin = admin;
++    }
++}
+Index: src/Category.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/Category.java b/src/Category.java
+new file mode 100644
+--- /dev/null	(date 1682720610226)
++++ b/src/Category.java	(date 1682720610226)
+@@ -0,0 +1,36 @@
++import java.util.ArrayList;
++
++public class Category {
++    private String name;
++    private ArrayList<Category> categories;
++
++    public Category( ArrayList<Category> arrOfCategory, String name) {
++        categories = arrOfCategory;
++        this.name=name;
++    }
++
++    public void setName(String name) {
++        this.name = name;
++    }
++
++    public String getName() {
++        return name;
++    }
++
++    public ArrayList<Category> getCategories() {
++        return categories;
++    }
++
++    public void setCategories(ArrayList<Category> categories) {
++        this.categories = categories;
++    }
++
++    public void displayCategory(){
++        for(int i=0; i<categories.size();i++) {
++            System.out.println(categories.get(i));
++        }
++    }
++    public void addCategory(Category c){
++        categories.add(c);
++    }
++}
