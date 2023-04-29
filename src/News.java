@@ -1,35 +1,35 @@
 import java.util.Date;
 
 public class News {
-    String Description;
-    String Title;
+    String description;
+
+    String title;
     Date date;
-    static int TotalRates[];
+    static int totalRates[];
     int Rate;
     //Categories Category;
     //Comments comment[];
 
-
     public News(String description, String title) {
-        Description = description;
-        Title = title;
+        description = description;
+        title = title;
         date =new Date() ;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        Description = description;
+        description = description;
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        title = title;
     }
 
     public Date getDate() {
@@ -41,13 +41,12 @@ public class News {
     }
 
     public void setRate(int rate) {
-        if(TotalRates.length!=0){
-            for(int i=0;i<TotalRates.length;i++){
-                Rate+=TotalRates[i];
+        if(totalRates.length!=0){
+            for(int i=0;i<totalRates.length;i++){
+                Rate+=totalRates[i];
             }
-            Rate/=TotalRates.length;
+            Rate/=totalRates.length;
         }
-        else
-            Rate = 0;
+        else Rate = 0;
     }
 }

@@ -39,7 +39,27 @@ public class Main {
     }
 
     public static void login() throws Exception {
-        System.out.println("login");
+        System.out.print("Enter username: \n");
+        String username = scanner.next();
+
+        System.out.print("Enter password: \n");
+        String password = scanner.next();
+
+        Connection connection = DBConnection.connection();
+        String searchSql = "SELECT * FROM news.user where username = ?";
+        PreparedStatement psmt = connection.prepareStatement(searchSql);
+        psmt.setString(1, username);
+        ResultSet resultSet = psmt.executeQuery();
+        if(resultSet.next()) {
+            String dbPassword = resultSet.getString(3);
+            if (dbPassword.equals(password)) {
+                System.out.println("True password");
+            } else {
+                System.out.println("Username or password is Invalid");
+                startup();
+                return;
+            }
+        }
     }
 
     public static void register() throws Exception {
@@ -67,17 +87,9 @@ public class Main {
                     startup();
                     return;
                 }
-                // insert new user data in db
-                String insertSql = "INSERT INTO news.user (username, password, isAdmin, age) VALUES (?, ?, 0, ?)";
-                PreparedStatement prepareStatement = connection.prepareStatement(insertSql);
+                User user = new User(username, password, false, age);
+                user.save();
 
-                // Set the parameters for the statement
-                prepareStatement.setString(1, username);
-                prepareStatement.setString(2, password);
-                prepareStatement.setInt(3, age);
-
-                // Execute the statement
-                int rows = prepareStatement.executeUpdate();
             } else {
                 System.out.println("Invalid inputs.");
                 register();
