@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class News {
     private String description;
@@ -10,14 +7,16 @@ public class News {
     private static ArrayList<Integer> totalRates;
     private float rate;
     private Category category;
-    private Queue<Comment> comment;
+//    TODO => methods
+    private static Stack<News> allNews;
+    private Queue<Comment> comments;
 
-    public News(String description, String title, int rate, Category category, Queue<Comment> comment) {
+    public News(String description, String title, Category category, Queue<Comment> comment) {
         this.description = description;
         this.title = title;
         this.date = new Date();
         this.category = category;
-        this.comment = new LinkedList<Comment>();
+        this.comments = new LinkedList<Comment>();
     }
 
     public void setDate() {
@@ -36,12 +35,12 @@ public class News {
         this.category = category;
     }
 
-    public Queue<Comment> getComment() {
-        return comment;
+    public Queue<Comment> getComments() {
+        return comments;
     }
 
     public void setComment() {
-        this.comment = new LinkedList<>();
+        this.comments = new LinkedList<>();
     }
 
     public String getDescription() {
@@ -69,7 +68,14 @@ public class News {
     }
 
     public void addNewComment(Comment comment) {
-        this.comment.add(comment);
+        this.comments.add(comment);
+    }
+
+    public void displayComments() {
+        Iterator<Comment> it = this.comments.iterator();
+        while (it.hasNext()) {
+            it.next().displayComment();
+        }
     }
 
     public void addRate(int rate) {

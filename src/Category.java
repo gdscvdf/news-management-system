@@ -5,11 +5,14 @@ import java.util.Collection;
 
 public class Category {
     private String name;
-    private ArrayList<Category> categories;
+    private static final ArrayList<Category> categories = new ArrayList<>();
 
-    public Category( ArrayList<Category> arrOfCategory, String name) {
-        categories = arrOfCategory;
+//    TODO => methods
+    private final ArrayList<News> NewsOfCategory = new ArrayList<>();
+
+    public Category(String name) {
         this.name=name;
+        categories.add(this);
     }
 
     public void setName(String name) {
@@ -42,13 +45,10 @@ public class Category {
 //        }
 //    }
 
-    public void setCategories(ArrayList<Category> categories) {
-        this.categories = categories;
-    }
 
     public void displayCategory(){
-        for(int i=0; i<categories.size();i++) {
-            System.out.println(categories.get(i));
+        for (Category category : categories) {
+            System.out.println(category);
         }
     }
     public void addCategory(Category c){
