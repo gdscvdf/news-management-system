@@ -1,6 +1,7 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class User {
     private String username;
@@ -61,5 +62,20 @@ public class User {
 
     public void setAdmin(boolean admin) {
         isAdmin = admin;
+    }
+
+    public void addPreferences (ArrayList<Category> categories, ArrayList<Category> preferences) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose two categories from the following list:");
+        for(int i=0; i<categories.size(); i++){
+            System.out.println((i+1) +". "+ categories.get(i));
+        }
+        System.out.print("Enter the number of the first category: ");
+        int firstIndex = scanner.nextInt() - 1;
+        preferences.add(categories.get(firstIndex));
+
+        System.out.print("Enter the number of the second category: ");
+        int secondIndex = scanner.nextInt() - 1;
+        preferences.add(categories.get(secondIndex));
     }
 }
