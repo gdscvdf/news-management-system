@@ -68,7 +68,7 @@ public class User {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose two categories from the following list:");
         for(int i=0; i<categories.size(); i++){
-            System.out.println((i+1) +". "+ categories.get(i));
+            System.out.println((i+1) +". "+ categories.get(i).getName());
         }
         System.out.print("Enter the number of the first category: ");
         int firstIndex = scanner.nextInt() - 1;

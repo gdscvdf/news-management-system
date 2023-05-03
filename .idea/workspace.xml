@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f7d609f6-b61c-432b-a2f2-c34e56f212a5" name="Changes" comment="add class admin and comment and some methods in main class">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2023_12_23_AM__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_4_29_2023_12_23_AM__Changes_.xml" afterDir="false" />
+    <list default="true" id="f7d609f6-b61c-432b-a2f2-c34e56f212a5" name="Changes" comment="add two functions in class category">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Admin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Category.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/News.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/News.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +120,14 @@
       <option name="project" value="LOCAL" />
       <updated>1682949838536</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="add two functions in class category">
+      <created>1683120469327</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1683120469327</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -142,6 +147,7 @@
     <MESSAGE value="add some updates in News &amp; Comment classes" />
     <MESSAGE value="add some attributes" />
     <MESSAGE value="add class admin and comment and some methods in main class" />
-    <option name="LAST_COMMIT_MESSAGE" value="add class admin and comment and some methods in main class" />
+    <MESSAGE value="add two functions in class category" />
+    <option name="LAST_COMMIT_MESSAGE" value="add two functions in class category" />
   </component>
 </project>

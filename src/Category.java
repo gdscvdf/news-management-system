@@ -2,13 +2,14 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Scanner;
 
 public class Category {
     private String name;
     public static final ArrayList<Category> categories = new ArrayList<>();
 
 //    TODO => methods
-    public static final ArrayList<News> NewsOfCategory = new ArrayList<>();
+    public final ArrayList<News> NewsOfCategory = new ArrayList<>();
 
     public Category(String name) {
         this.name=name;
@@ -58,11 +59,20 @@ public class Category {
     public void addNewsToRelatedCategory(News n ){
         NewsOfCategory.add(n);
     }
-    public void displayNewsOfCategory(){
-        for(int i=0;i<Category.NewsOfCategory.size();i++){
-            System.out.println(i+1 + " - " + Category.NewsOfCategory.get(i).getTitle());
-            System.out.println("\t" + Category.NewsOfCategory.get(i).getDescription());
+    public void displayNewsOfCategory() {
+        for(int i=0;i<this.NewsOfCategory.size();i++){
+            System.out.println(i+1 + " - " + this.NewsOfCategory.get(i).getTitle());
+            System.out.println("\t" + this.NewsOfCategory.get(i).getDescription());
         }
+    }
+    public static String filterByCategory() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Choose category from the following list:");
+        for(int i=0; i<categories.size(); i++){
+            System.out.println((i+1) +". "+ categories.get(i).getName());
+        }
+        System.out.print("Enter the name of the category: ");
+        return scanner.next();
     }
 
 }
