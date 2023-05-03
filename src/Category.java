@@ -5,10 +5,10 @@ import java.util.Collection;
 
 public class Category {
     private String name;
-    private static final ArrayList<Category> categories = new ArrayList<>();
+    public static final ArrayList<Category> categories = new ArrayList<>();
 
 //    TODO => methods
-    private final ArrayList<News> NewsOfCategory = new ArrayList<>();
+    public static final ArrayList<News> NewsOfCategory = new ArrayList<>();
 
     public Category(String name) {
         this.name=name;
@@ -54,4 +54,15 @@ public class Category {
     public void addCategory(Category c){
         categories.add(c);
     }
+
+    public void addNewsToRelatedCategory(News n ){
+        NewsOfCategory.add(n);
+    }
+    public void displayNewsOfCategory(){
+        for(int i=0;i<Category.NewsOfCategory.size();i++){
+            System.out.println(i+1 + " - " + Category.NewsOfCategory.get(i).getTitle());
+            System.out.println("\t" + Category.NewsOfCategory.get(i).getDescription());
+        }
+    }
+
 }

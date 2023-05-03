@@ -117,4 +117,11 @@ public class Main {
     public static void retrieveData() {
 
     }
+//    public void options(){
+//        int i = 0;
+//        switch (i){
+//            case 1:
+//
+//        }
+//    }
 }

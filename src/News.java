@@ -8,7 +8,7 @@ public class News {
     private float rate;
     private Category category;
 //    TODO => methods
-    private static Stack<News> allNews;
+    public static Queue<News> allNews;
     private Queue<Comment> comments;
 
     public News(String description, String title, Category category, Queue<Comment> comment) {
@@ -17,6 +17,9 @@ public class News {
         this.date = new Date();
         this.category = category;
         this.comments = new LinkedList<Comment>();
+        ///////////////////////////////////////
+        this.category.addNewsToRelatedCategory(this);
+
     }
 
     public void setDate() {
