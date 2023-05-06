@@ -57,10 +57,17 @@ public class Main {
             String dbPassword = resultSet.getString(3);
             if (dbPassword.equals(password)) {
                 System.out.println("True password");
+                boolean isAdmin = resultSet.getBoolean(4);
+                int age = resultSet.getInt(5);
+                if (isAdmin) {
+                    User admin = new Admin(username, dbPassword, age, true);
+                }
+                else {
+                    User user = new User(username, dbPassword, false, age);
+                }
             } else {
                 System.out.println("Username or password is Invalid");
                 startup();
-                return;
             }
         }
     }
@@ -117,7 +124,7 @@ public class Main {
     public static void retrieveData() {
 
     }
-    public void options(){
+    public void options() {
         int i = 0;
         String description = scanner.next();
         String title = scanner.next();
