@@ -9,7 +9,7 @@ public class User {
     private final int age;
     private ArrayList<Category> preferences;
 
-    public static ArrayList<User> allUsers;
+    public static ArrayList<User> allUsers = new ArrayList<>();
     private boolean isAdmin;
 
     public User(String UserName, String password, boolean isAdmin, int age) {

@@ -8,7 +8,7 @@ public class News {
     private float rate;
     private Category category;
 //    TODO => methods
-    public static Queue<News> allNews;
+    public static Queue<News> allNews = new LinkedList<>();
     private Queue<Comment> comments;
 
     public News(String description, String title, Category category, Queue<Comment> comment) {

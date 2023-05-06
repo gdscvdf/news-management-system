@@ -126,10 +126,10 @@ public class Main {
             PreparedStatement userPsmt = connection.prepareStatement(userSql);
             ResultSet userResultSet = userPsmt.executeQuery();
             while (userResultSet.next()) {
-                String username = userResultSet.getString(1);
-                String password = userResultSet.getString(2);
-                boolean isAdmin = userResultSet.getBoolean(3);
-                int age = userResultSet.getInt(4);
+                String username = userResultSet.getString(2);
+                String password = userResultSet.getString(3);
+                boolean isAdmin = userResultSet.getBoolean(4);
+                int age = userResultSet.getInt(5);
                 User user = new User(username, password, isAdmin, age);
             }
             // retrieve all news from DB
@@ -137,11 +137,11 @@ public class Main {
             PreparedStatement newsPsmt = connection.prepareStatement(newsSql);
             ResultSet newsResultSet = newsPsmt.executeQuery();
             while (newsResultSet.next()) {
-                Date date = newsResultSet.getDate(1);
-                float rate = newsResultSet.getFloat(2);
-                String description = newsResultSet.getString(3);
-                String title = newsResultSet.getString(4);
-                String categoryName = newsResultSet.getString(5);
+                Date date = newsResultSet.getDate(2);
+                float rate = newsResultSet.getFloat(3);
+                String description = newsResultSet.getString(4);
+                String title = newsResultSet.getString(5);
+                String categoryName = newsResultSet.getString(6);
                 Category category = new Category(categoryName);
                 News news = new News(description, title, category, new LinkedList<>(), rate, date);
             }
@@ -150,8 +150,8 @@ public class Main {
             PreparedStatement prefPsmt = connection.prepareStatement(prefSql);
             ResultSet prefResultSet = prefPsmt.executeQuery();
             while (prefResultSet.next()) {
-                String categoryName = prefResultSet.getString(0);
-                String username = prefResultSet.getString(1);
+                String categoryName = prefResultSet.getString(1);
+                String username = prefResultSet.getString(2);
                 for (int i = 0; i < Category.categories.size(); i++) {
                     if (categoryName.equals(Category.categories.get(i).getName())) {
                         for (int j = 0; j < User.allUsers.size(); j++) {

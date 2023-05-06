@@ -8,7 +8,8 @@ public class DBConnection {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/news",
-                    "root", "password");
+                    "root", "peter2192003"
+            );
 
             //ResultSet resultSet = statement.executeQuery("Select * from news.user");
 
@@ -27,7 +28,8 @@ public class DBConnection {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/news",
-                    "root", "password");
+                    "root", "peter2192003"
+            );
 
             return connection;
         }
