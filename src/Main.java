@@ -58,9 +58,11 @@ public class Main {
                 int age = resultSet.getInt(5);
                 if (isAdmin) {
                     User admin = new Admin(username, dbPassword, age, true);
+                    displayNews(admin);
                 }
                 else {
                     User user = new User(username, dbPassword, false, age);
+                    displayNews(user);
                 }
             } else {
                 System.out.println("Username or password is Invalid");
@@ -162,17 +164,22 @@ public class Main {
     }
     public static void displayNews(User user) {
         Stack<News> fixedNews = new Stack<News>();
-        for (int i = 0; i < user.getPreferences().size(); i++) {
+        if (user.isAdmin()) {
             for (News n : News.allNews)
-                if (user.getPreferences().get(i).getName() != n.getCategory().getName()) {
-                    fixedNews.push(n);
-                }
-        }
+                fixedNews.push(n);
+        } else {
+            for (int i = 0; i < user.getPreferences().size(); i++) {
+                for (News n : News.allNews)
+                    if (user.getPreferences().get(i).getName() != n.getCategory().getName()) {
+                        fixedNews.push(n);
+                    }
+            }
 
-        for (int i = 0; i < user.getPreferences().size(); i++) {
-           for (News n : News.allNews){
-                if (user.getPreferences().get(i).getName() == n.getCategory().getName()) {
-                    fixedNews.push(n);
+            for (int i = 0; i < user.getPreferences().size(); i++) {
+                for (News n : News.allNews) {
+                    if (user.getPreferences().get(i).getName() == n.getCategory().getName()) {
+                        fixedNews.push(n);
+                    }
                 }
             }
         }
