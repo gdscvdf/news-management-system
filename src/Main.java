@@ -119,15 +119,28 @@ public class Main {
     }
     public void options(){
         int i = 0;
+        String description = scanner.next();
+        String title = scanner.next();
+        String name = scanner.next();
         switch (i){
             case 1:
                 break;
             case 2:
                 Category.filterByCategory();
                         break;
-//            case 3:
-//                Admin.addNews();
-//                break;
+            case 3:
+                for (int j=0;j<Category.categories.size();j++) {
+                    if (name == Category.categories.get(j).getName()) {
+                        News news = new News(description, title, Category.categories.get(j), new LinkedList<Comment>());
+                        Admin.addNews(news);
+                    } else {
+                        Category category = new Category(name);
+                        Category.addCategory(category);
+                        News news = new News(description, title, Category.categories.get(j), new LinkedList<Comment>());
+                        Admin.addNews(news);
+                    }
+                        break;
+                }
 //            case 4:
 //                Admin.removeNews();
 //                break;

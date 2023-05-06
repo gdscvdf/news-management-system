@@ -52,7 +52,7 @@ public class Category {
             System.out.println(category);
         }
     }
-    public void addCategory(Category c){
+    public static void addCategory(Category c){
         categories.add(c);
     }
 
