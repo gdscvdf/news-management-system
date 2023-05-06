@@ -6,10 +6,10 @@ public class Admin extends User {
     super(username, password, isAdmin, age);
   }
 
-  public void addNews(News news) {News.allNews.add(news);
+  public static void addNews(News news) {News.allNews.add(news);
   }
 
-  public void removeNews(News news) {
+  public static void removeNews(News news) {
     if (News.allNews.contains(news)) {
       News.allNews.remove(news);
     } else {
@@ -17,7 +17,7 @@ public class Admin extends User {
     }
   }
 
-  public void updateNews(News news, String newTitle, String newBody) {
+  public static void updateNews(News news, String newTitle, String newBody) {
     if (News.allNews.contains(news)) {
       if (newTitle != null) {
         news.setTitle(newTitle);

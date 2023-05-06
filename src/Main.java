@@ -117,11 +117,26 @@ public class Main {
     public static void retrieveData() {
 
     }
-//    public void options(){
-//        int i = 0;
-//        switch (i){
-//            case 1:
-//
-//        }
-//    }
+    public void options(){
+        int i = 0;
+        switch (i){
+            case 1:
+                break;
+            case 2:
+                Category.filterByCategory();
+                        break;
+//            case 3:
+//                Admin.addNews();
+//                break;
+//            case 4:
+//                Admin.removeNews();
+//                break;
+//            case 5:
+//                Admin.updateNews();
+//                break;
+
+
+
+        }
+    }
 }
