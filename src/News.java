@@ -93,26 +93,33 @@ public class News {
             this.rate /= totalRates.size();
         } else this.rate = 0;
     }
-    public void newsToOpen (){
+    public void newsToOpen (User user) throws Exception{
+        try {
         System.out.println(this.getTitle());
         System.out.println("\t" + this.getDescription());
-        System.out.println( "\t" + "For rating press 1 , For comment press 2 ");
+        System.out.println( "\t" + "For rating press 1 , For comment press 2 , For return press 3 ");
         Scanner input = new Scanner(System.in);
         int i = input.nextInt();
         if(i==1){
             System.out.println("Enter your rate ");
             int userRate = input.nextInt();
             this.addRate(userRate);
-        } else if (i==2) {
+        }
+        else if (i==2) {
             System.out.println("Enter your comment");
             String userComment = input.next();
-//            User u;
-//            Comment comment(,)
-//            this.addNewComment();
-
+            Comment comment = new Comment(user,userComment);
+            this.addNewComment(comment);
         }
+        else if (i==3){
+
+            }
 
 
+    }
+        catch (Exception e){
+            System.out.println(" invalid input ! ");
+        }
     }
 
 

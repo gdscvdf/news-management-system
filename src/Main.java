@@ -2,10 +2,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
@@ -99,6 +96,8 @@ public class Main {
                 }
                 User user = new User(username, password, false, age);
                 user.save();
+                user.addPreferences();
+                displayNews(user);
 
             } else {
                 System.out.println("Invalid inputs.");
@@ -124,39 +123,65 @@ public class Main {
     public static void retrieveData() {
 
     }
-    public void options() {
-        int i = 0;
-        String description = scanner.next();
-        String title = scanner.next();
-        String name = scanner.next();
-        switch (i){
-            case 1:
-                break;
-            case 2:
-                Category.filterByCategory();
+    public void options() throws Exception {
+        try {
+            int i = 0;
+            String description = scanner.next();
+            String title = scanner.next();
+            String name = scanner.next();
+            switch (i) {
+                case 1:
+                    break;
+                case 2:
+                    Category.filterByCategory();
+                    break;
+                case 3:
+                    for (int j = 0; j < Category.categories.size(); j++) {
+                        if (name == Category.categories.get(j).getName()) {
+                            News news = new News(description, title, Category.categories.get(j), new LinkedList<Comment>());
+                            Admin.addNews(news);
+                        } else {
+                            Category category = new Category(name);
+                            Category.addCategory(category);
+                            News news = new News(description, title, Category.categories.get(j), new LinkedList<Comment>());
+                            Admin.addNews(news);
+                        }
                         break;
-            case 3:
-                for (int j=0;j<Category.categories.size();j++) {
-                    if (name == Category.categories.get(j).getName()) {
-                        News news = new News(description, title, Category.categories.get(j), new LinkedList<Comment>());
-                        Admin.addNews(news);
-                    } else {
-                        Category category = new Category(name);
-                        Category.addCategory(category);
-                        News news = new News(description, title, Category.categories.get(j), new LinkedList<Comment>());
-                        Admin.addNews(news);
                     }
-                        break;
-                }
 //            case 4:
 //                Admin.removeNews();
 //                break;
 //            case 5:
 //                Admin.updateNews();
 //                break;
+            }
+        }
+        catch (Exception e){
+            System.out.println(" invalid input ! ");
+        }
+    }
+    public static void displayNews(User user) {
+        Stack<News> fixedNews = new Stack<News>();
+        for (int i = 0; i < user.getPreferences().size(); i++) {
+            for (News n : News.allNews)
+                if (user.getPreferences().get(i).getName() != n.getCategory().getName()) {
+                    fixedNews.push(n);
+                }
+        }
 
-
-
+        for (int i = 0; i < user.getPreferences().size(); i++) {
+           for (News n : News.allNews){
+                if (user.getPreferences().get(i).getName() == n.getCategory().getName()) {
+                    fixedNews.push(n);
+                }
+            }
+        }
+       Iterator<News> it = fixedNews.iterator();
+        int counter = 0;
+        while (it.hasNext()){
+            News news = it.next();
+            counter++;
+            System.out.println( counter + " : " + news);
         }
     }
 }

@@ -64,18 +64,18 @@ public class User {
         isAdmin = admin;
     }
 
-    public void addPreferences (ArrayList<Category> categories, ArrayList<Category> preferences) {
+    public void addPreferences () {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose two categories from the following list:");
-        for(int i=0; i<categories.size(); i++){
-            System.out.println((i+1) +". "+ categories.get(i).getName());
+        for(int i=0; i<Category.categories.size(); i++){
+            System.out.println((i+1) +". "+ Category.categories.get(i).getName());
         }
         System.out.print("Enter the number of the first category: ");
         int firstIndex = scanner.nextInt() - 1;
-        preferences.add(categories.get(firstIndex));
+        preferences.add(Category.categories.get(firstIndex));
 
         System.out.print("Enter the number of the second category: ");
         int secondIndex = scanner.nextInt() - 1;
-        preferences.add(categories.get(secondIndex));
+        preferences.add(Category.categories.get(secondIndex));
     }
 }
