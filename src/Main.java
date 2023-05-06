@@ -7,6 +7,7 @@ import java.util.*;
 public class Main {
     static Scanner scanner = new Scanner(System.in);
     public static void main(String[] arg) throws Exception {
+        retrieveData();
         startup();
     }
 
@@ -39,35 +40,29 @@ public class Main {
     }
 
     public static void login() throws Exception {
-        System.out.print("Enter username: \n");
-        String username = scanner.next();
+        try {
+            System.out.print("Enter username: \n");
+            String username = scanner.next();
 
-        System.out.print("Enter password: \n");
-        String password = scanner.next();
+            System.out.print("Enter password: \n");
+            String password = scanner.next();
 
-        Connection connection = DBConnection.connection();
-        String searchSql = "SELECT * FROM news.user where username = ?";
-        PreparedStatement psmt = connection.prepareStatement(searchSql);
-        psmt.setString(1, username);
-        ResultSet resultSet = psmt.executeQuery();
-        if(resultSet.next()) {
-            String dbPassword = resultSet.getString(3);
-            if (dbPassword.equals(password)) {
-                System.out.println("True password");
-                boolean isAdmin = resultSet.getBoolean(4);
-                int age = resultSet.getInt(5);
-                if (isAdmin) {
-                    User admin = new Admin(username, dbPassword, age, true);
-                    displayNews(admin);
+            for (int i = 0; i < User.allUsers.size(); i++) {
+                if (username.equals(User.allUsers.get(i).getUserName())) {
+                    if (password.equals(User.allUsers.get(i).getPassword())) {
+                        displayNews(User.allUsers.get(i));
+                    } else {
+                        System.out.println("Invalid Password");
+                        startup();
+                        return;
+                    }
                 }
-                else {
-                    User user = new User(username, dbPassword, false, age);
-                    displayNews(user);
-                }
-            } else {
-                System.out.println("Username or password is Invalid");
-                startup();
             }
+            System.out.println("the username is invalid\n");
+            startup();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            startup();
         }
     }
 
@@ -121,10 +116,59 @@ public class Main {
 
         return username.matches(usernameRegex) && password.matches(passwordRegex);
     }
-//  TODO
-    public static void retrieveData() {
 
+    public static void retrieveData() throws Exception {
+        try {
+            Connection connection = DBConnection.connection();
+
+            // retrieve all users from DB
+            String userSql = "SELECT * FROM news.user";
+            PreparedStatement userPsmt = connection.prepareStatement(userSql);
+            ResultSet userResultSet = userPsmt.executeQuery();
+            while (userResultSet.next()) {
+                String username = userResultSet.getString(1);
+                String password = userResultSet.getString(2);
+                boolean isAdmin = userResultSet.getBoolean(3);
+                int age = userResultSet.getInt(4);
+                User user = new User(username, password, isAdmin, age);
+            }
+            // retrieve all news from DB
+            String newsSql = "SELECT * FROM news.news";
+            PreparedStatement newsPsmt = connection.prepareStatement(newsSql);
+            ResultSet newsResultSet = newsPsmt.executeQuery();
+            while (newsResultSet.next()) {
+                Date date = newsResultSet.getDate(1);
+                float rate = newsResultSet.getFloat(2);
+                String description = newsResultSet.getString(3);
+                String title = newsResultSet.getString(4);
+                String categoryName = newsResultSet.getString(5);
+                Category category = new Category(categoryName);
+                News news = new News(description, title, category, new LinkedList<>(), rate, date);
+            }
+            // retrieve all preferences from DB
+            String prefSql = "SELECT * FROM news.preferences";
+            PreparedStatement prefPsmt = connection.prepareStatement(prefSql);
+            ResultSet prefResultSet = prefPsmt.executeQuery();
+            while (prefResultSet.next()) {
+                String categoryName = prefResultSet.getString(0);
+                String username = prefResultSet.getString(1);
+                for (int i = 0; i < Category.categories.size(); i++) {
+                    if (categoryName.equals(Category.categories.get(i).getName())) {
+                        for (int j = 0; j < User.allUsers.size(); j++) {
+                            if (username.equals(User.allUsers.get(i).getUserName())) {
+                                User.allUsers.get(i).addPreferences(Category.categories.get(i));
+                            }
+                        }
+                    }
+                }
+            }
+
+        } catch (Exception exception) {
+            System.out.println(exception.getMessage());
+            startup();
+        }
     }
+
     public void options() throws Exception {
         try {
             int i = 0;
@@ -164,6 +208,11 @@ public class Main {
     }
     public static void displayNews(User user) {
         Stack<News> fixedNews = new Stack<News>();
+        for (News n : News.allNews) {
+            if (n.getRate() < 2 && n.getTotalRates().size() > 2) {
+                News.allNews.remove(n);
+            }
+        }
         if (user.isAdmin()) {
             for (News n : News.allNews)
                 fixedNews.push(n);
@@ -188,7 +237,7 @@ public class Main {
         while (it.hasNext()){
             News news = it.next();
             counter++;
-            System.out.println( counter + " : " + news);
+            System.out.println( counter + " - " + news);
         }
     }
 }

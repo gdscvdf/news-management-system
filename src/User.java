@@ -6,8 +6,10 @@ import java.util.Scanner;
 public class User {
     private String username;
     private String password;
-    private int age;
+    private final int age;
     private ArrayList<Category> preferences;
+
+    public static ArrayList<User> allUsers;
     private boolean isAdmin;
 
     public User(String UserName, String password, boolean isAdmin, int age) {
@@ -15,6 +17,8 @@ public class User {
         this.password = password;
         this.isAdmin = isAdmin;
         this.age = age;
+
+        allUsers.add(this);
     }
 
     public void save() throws Exception {
@@ -77,5 +81,9 @@ public class User {
         System.out.print("Enter the number of the second category: ");
         int secondIndex = scanner.nextInt() - 1;
         preferences.add(Category.categories.get(secondIndex));
+    }
+
+    public void addPreferences(Category category) {
+        this.preferences.add(category);
     }
 }

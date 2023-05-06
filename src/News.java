@@ -4,7 +4,7 @@ public class News {
     private String description;
     private String title;
     private Date date;
-    private static ArrayList<Integer> totalRates;
+    private static ArrayList<Float> totalRates;
     private float rate;
     private Category category;
 //    TODO => methods
@@ -22,11 +22,24 @@ public class News {
         News.allNews.add(this);
     }
 
+    public News(String description, String title, Category category, Queue<Comment> comment,float rate,Date date) {
+        this.description = description;
+        this.title = title;
+        this.date = new Date();
+        this.category = category;
+        this.comments = new LinkedList<Comment>();
+        this.rate = rate;
+        this.date = date;
+        ///////////////////////////////////////
+        this.category.addNewsToRelatedCategory(this);
+        News.allNews.add(this);
+    }
+
     public void setDate() {
         this.date = new Date();
     }
 
-    public static ArrayList<Integer> getTotalRates() {
+    public ArrayList<Float> getTotalRates() {
         return totalRates;
     }
 
@@ -67,6 +80,12 @@ public class News {
     }
 
     public float getRate() {
+        if (totalRates.size() != 0) {
+            for (int i = 0; i < totalRates.size(); i++) {
+                this.rate += totalRates.get(i);
+            }
+            this.rate /= totalRates.size();
+        } else this.rate = 0;
         return rate;
     }
 
@@ -81,7 +100,7 @@ public class News {
         }
     }
 
-    public void addRate(int rate) {
+    public void addRate(float rate) {
         totalRates.add(rate);
     }
 
