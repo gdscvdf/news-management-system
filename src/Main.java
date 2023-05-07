@@ -183,7 +183,7 @@ public class Main {
                     break;
                 case 3:
                     for (int j = 0; j < Category.categories.size(); j++) {
-                        if (name == Category.categories.get(j).getName()) {
+                        if (name.equals(Category.categories.get(j).getName())) {
                             News news = new News(description, title, Category.categories.get(j), new LinkedList<Comment>());
                             Admin.addNews(news);
                         } else {
@@ -219,14 +219,14 @@ public class Main {
         } else {
             for (int i = 0; i < user.getPreferences().size(); i++) {
                 for (News n : News.allNews)
-                    if (user.getPreferences().get(i).getName() != n.getCategory().getName()) {
+                    if (!user.getPreferences().get(i).getName().equals(n.getCategory().getName())) {
                         fixedNews.push(n);
                     }
             }
 
             for (int i = 0; i < user.getPreferences().size(); i++) {
                 for (News n : News.allNews) {
-                    if (user.getPreferences().get(i).getName() == n.getCategory().getName()) {
+                    if (user.getPreferences().get(i).getName().equals(n.getCategory().getName())) {
                         fixedNews.push(n);
                     }
                 }
