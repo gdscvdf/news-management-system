@@ -194,12 +194,28 @@ public class Main {
                         }
                         break;
                     }
-//            case 4:
-//                Admin.removeNews();
-//                break;
-//            case 5:
-//                Admin.updateNews();
-//                break;
+            case 4:
+             String removedTitle = scanner.next();
+                Iterator<News> it = News.allNews.iterator();
+                while (it.hasNext()){
+                   News news = it.next();
+                   if(news.getTitle() == removedTitle ) {
+                       Admin.removeNews(news);
+                       break;
+                   }
+                }
+                break;
+            case 5:
+                String updatedTitle = scanner.next();
+                Iterator<News> itt = News.allNews.iterator();
+                while (itt.hasNext()){
+                    News news = itt.next();
+                    if(news.getTitle() == updatedTitle ) {
+                        Admin.updateNews(news);
+                        break;
+                    }
+                }
+                break;
             }
         }
         catch (Exception e){

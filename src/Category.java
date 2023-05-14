@@ -47,7 +47,7 @@ public class Category {
 //    }
 
 
-    public void displayCategory(){
+    public static void displayCategory(){
         for (Category category : categories) {
             System.out.println(category);
         }
@@ -68,9 +68,7 @@ public class Category {
     public static String filterByCategory() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Choose category from the following list:");
-        for(int i=0; i<categories.size(); i++){
-            System.out.println((i+1) +". "+ categories.get(i).getName());
-        }
+        displayCategory();
         System.out.print("Enter the name of the category: ");
         return scanner.next();
     }

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Admin extends User {
 
@@ -17,7 +18,10 @@ public class Admin extends User {
     }
   }
 
-  public static void updateNews(News news, String newTitle, String newBody) {
+  public static void updateNews(News news) {
+    Scanner scanner = new Scanner(System.in);
+    String newTitle = scanner.next();
+    String newBody = scanner.next();
     if (News.allNews.contains(news)) {
       if (newTitle != null) {
         news.setTitle(newTitle);
