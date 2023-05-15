@@ -1,22 +1,28 @@
 import java.util.Date;
 
 public class Comment {
-  private User user;
+  private String username;
   private String comment;
+
+  private String newsTitle;
   private Date date;
 
-  public Comment(User user, String comment) {
-    this.user = user;
+  public Comment(String comment, Date date,String username) {
+    this.username = username;
     this.comment = comment;
-    this.date = new Date();
+    this.date = date;
+  }
+  public Comment(String comment,String username, String newsTitle) {
+    this.username = username;
+    this.comment = comment;
+    this.newsTitle = newsTitle;
+  }
+  public String getUser() {
+    return username;
   }
 
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
+  public void setUser(String user) {
+    this.username = user;
   }
 
   public String getComment() {
@@ -35,7 +41,15 @@ public class Comment {
     this.date = new Date();
   }
 
+  public String getUsername() {
+    return username;
+  }
+
+  public String getNewsTitle() {
+    return newsTitle;
+  }
+
   public void displayComment() {
-    System.out.println(this.user.getUserName() + "\n" + this.comment + "\n" + this.date);
+    System.out.println(this.username + "\n" + this.comment + "\n" + this.date);
   }
 }

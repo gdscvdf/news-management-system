@@ -1,18 +1,14 @@
-import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Scanner;
 
 public class Category {
     private String name;
     public static final ArrayList<Category> categories = new ArrayList<>();
 
-//    TODO => methods
     public final ArrayList<News> NewsOfCategory = new ArrayList<>();
 
     public Category(String name) {
-        this.name=name;
+        this.name = name;
     }
 
     public ArrayList<News> getNewsOfCategory() {
@@ -31,28 +27,11 @@ public class Category {
         return categories;
     }
 
-//    public static String[] getCategoriesFromDB() throws Exception {
-//        try {
-//            Connection connection = DBConnection.connection();
-//
-//            String sql = "SELECT name FROM news.category";
-//            PreparedStatement psmt = connection.prepareStatement(sql);
-//            ResultSet resultSet = psmt.executeQuery();
-//            if (resultSet.next()) {
-//                Array ArrOfCategories = resultSet.getArray("name");
-//                System.out.println(ArrOfCategories);
-//            }
-//            return null;
-//        } catch (Exception exception) {
-//            System.out.println(exception.getMessage());
-//            return null;
-//        }
-//    }
-
-
     public static void displayCategory(){
+        int i = 1;
         for (Category category : categories) {
-            System.out.println(category);
+            System.out.println(i + " - " + category.getName());
+            i++;
         }
     }
     public static void addCategory(Category c){
@@ -72,12 +51,18 @@ public class Category {
             System.out.println("\t" + this.NewsOfCategory.get(i).getDescription());
         }
     }
-    public static String filterByCategory() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Choose category from the following list:");
-        displayCategory();
-        System.out.print("Enter the name of the category: ");
-        return scanner.next();
+    public static int filterByCategory() throws Exception {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Choose category from the following list:");
+            displayCategory();
+            System.out.print("Enter the name of the category: ");
+            return scanner.nextInt();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            Main.startup();
+            return -1;
+        }
     }
 
 }

@@ -2,19 +2,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
     private static ArrayList<News> fixedNews = new ArrayList<>();
-    static List<News> uniqueList = null;
+    static List<News> uniqueList = new ArrayList<>();
     public static void main(String[] arg) throws Exception {
         retrieveData();
         startup();
     }
 
     public static void startup() throws Exception {
-        System.out.println("\t\t\t\t\t\t\t\t\t\t\t\t\tWelcome to News System\n");
+        System.out.println("\n\n\t\t\t\t\t\t\t\t\u001B[1m\u001B[31mWelcome to News System\u001B[0m\u001B[0m\n");
         System.out.println("Press 1 for login, 2 for register\n");
         try {
             boolean checker = false;
@@ -140,13 +139,12 @@ public class Main {
             PreparedStatement newsPsmt = connection.prepareStatement(newsSql);
             ResultSet newsResultSet = newsPsmt.executeQuery();
             while (newsResultSet.next()) {
-                Date date = newsResultSet.getDate(2);
                 float rate = newsResultSet.getFloat(3);
                 String description = newsResultSet.getString(4);
                 String title = newsResultSet.getString(5);
                 String categoryName = newsResultSet.getString(6);
                 Category category = new Category(categoryName);
-                News news = new News(description, title, category, new LinkedList<>(), rate, date);
+                News news = new News(description, title, category, new LinkedList<>(), rate);
             }
             // retrieve all users from DB
             String userSql = "SELECT * FROM news.user";
@@ -183,6 +181,21 @@ public class Main {
                     }
                 }
             }
+            // retrieve all comments from DB
+            String commentsSql = "SELECT * FROM news.comment";
+            PreparedStatement commentsPsmt = connection.prepareStatement(commentsSql);
+            ResultSet commentsResultSet = commentsPsmt.executeQuery();
+            while (commentsResultSet.next()) {
+                String newsTitle = commentsResultSet.getString(1);
+                Date date = commentsResultSet.getDate(2);
+                String description = commentsResultSet.getString(3);
+                String username = commentsResultSet.getString(4);
+                for (int i = 0; i < News.allNews.size(); i++) {
+                    if (News.allNews.get(i).getTitle().equals(newsTitle)) {
+                        News.allNews.get(i).addNewComment(new Comment(description, date, username));
+                    }
+                }
+            }
             ///////////
             for (int i = 0; i < Category.categories.size(); i++) {
                 News.MappedNews.put(Category.categories.get(i).getName(), Category.categories.get(i).getNewsOfCategory());
@@ -202,84 +215,75 @@ public class Main {
                 choice = scanner.nextInt();
             }else {
                 System.out.println("1-Choose news to read\n2-To comment or rate\n3-Filter news by category\n4-Enter keyword to search for news\n5-Log Out\n6-Add news\n7-Remove news\n8-Update news");
+                System.out.println("Enter the number of option you want: \n");
                 choice = scanner.nextInt();
             }
             switch (choice) {
-                case 1:
+                case 1 -> {
                     System.out.println("Choose the index of the news: \n");
                     int chosenNum = scanner.nextInt();
                     int count = 1;
                     for (News news : uniqueList) {
-                        if (chosenNum==count){
+                        if (chosenNum == count) {
                             System.out.println(news.getTitle());
                             System.out.println(news.getDescription());
-                            System.out.println(news.getDate());
+                            System.out.println("Rate: " + news.getRate() + "\n");
                             System.out.println("Comments: \n");
                             news.displayComments();
                             break;
-                                }
+                        }
                         count++;
                     }
                     System.out.println("To return enter 1 else enter 0 \n");
                     int returnNum = scanner.nextInt();
-                    if(returnNum ==1){
+                    if (returnNum == 1) {
                         displayNews(user);
                         options(user);
-                    }
-                    else System.exit(0);
-                    break;
-                case 2:
+                    } else System.exit(0);
+                }
+                case 2 -> {
                     System.out.println("Choose news to open \n");
-                    int numberOfNews = scanner.nextInt()-1;
-                    Iterator<News> iterate = fixedNews.iterator();
+                    int numberOfNews = scanner.nextInt() - 1;
+                    Iterator<News> iterate = uniqueList.iterator();
                     int counter = 0;
-                    News chosenNews =new News() ;
-                    while (iterate.hasNext()){
+                    News chosenNews = new News();
+                    while (iterate.hasNext()) {
                         chosenNews = iterate.next();
-                        if(counter == numberOfNews)
+                        if (counter == numberOfNews)
                             break;
                         counter++;
                     }
                     chosenNews.newsToOpen(user);
                     System.out.println("To return enter 1 else enter 0 \n");
                     int returnNum1 = scanner.nextInt();
-                    if(returnNum1 ==1){
+                    if (returnNum1 == 1) {
                         displayNews(user);
                         options(user);
-                    }
-                    else System.exit(0);
-                    break;
-                case 3:
-                    String filteredCategory = Category.filterByCategory();
-                    for(int i=0 ; i<Category.categories.size(); i++){
-                        if(Category.categories.get(i).getName() == filteredCategory){
-                            Category.categories.get(i).displayNewsOfCategory();
-                            break;
-                        }
-                    }
+                    } else System.exit(0);
+                }
+                case 3 -> {
+                    int filteredCategory = Category.filterByCategory() - 1;
+                    Category.categories.get(filteredCategory).displayNewsOfCategory();
                     System.out.println("To return enter 1 else enter 0 \n");
                     int returnNum2 = scanner.nextInt();
-                    if(returnNum2 ==1){
+                    if (returnNum2 == 1) {
                         displayNews(user);
                         options(user);
-                    }
-                    else System.exit(0);
-                    break ;
-                case 4:
-                    String keyword =scanner.next();
+                    } else System.exit(0);
+                }
+                case 4 -> {
+                    System.out.println("Enter your keyword:\n");
+                    String keyword = scanner.next();
                     Search(keyword);
                     System.out.println("To return enter 1 else enter 0 \n");
                     int returnNum3 = scanner.nextInt();
-                    if(returnNum3 ==1){
+                    if (returnNum3 == 1) {
                         displayNews(user);
                         options(user);
-                    }
-                    else System.exit(0);
-                    break;
-                case 5:
-                    System.exit(0);
-                    break;
-                case 6:
+                    } else System.exit(0);
+                }
+                case 5 -> System.exit(0);
+                case 6 -> {
                     System.out.println("Enter the description :\n");
                     String description = scanner.next();
                     System.out.println("Enter the title :\n");
@@ -290,62 +294,57 @@ public class Main {
                         if (name.equals(Category.categories.get(j).getName())) {
                             News news = new News(description, title, Category.categories.get(j), new LinkedList<Comment>());
                             Admin.addNews(news);
+                            break;
                         } else {
                             Category category = new Category(name);
                             Category.addCategory(category);
                             News news = new News(description, title, Category.categories.get(j), new LinkedList<Comment>());
                             Admin.addNews(news);
+                            break;
                         }
                     }
                     System.out.println("To return enter 1 else enter 0");
                     int returnNum4 = scanner.nextInt();
-                    if(returnNum4 ==1){
+                    if (returnNum4 == 1) {
                         displayNews(user);
                         options(user);
-                    }
-                    else System.exit(0);
-                    break;
-                case 7:
+                    } else System.exit(0);
+                }
+                case 7 -> {
                     System.out.println("Choose index to remove: \n");
-                    int chosennum = scanner.nextInt();
-                    for(int i= 0;i <uniqueList.size();i++){
-                        if(chosennum== i){
-                            Admin.removeNews(uniqueList.get(i));
-                            break;
-                        }
-                    }System.out.println("To return enter 1 else enter 0");
+                    int chosenIdx = scanner.nextInt() - 1;
+                    Admin.removeNews(chosenIdx);
+                    System.out.println("To return enter 1 else enter 0");
                     int returnNum5 = scanner.nextInt();
-                    if(returnNum5 ==1){
+                    if (returnNum5 == 1) {
                         displayNews(user);
                         options(user);
-                    }
-                    else System.exit(0);
-
-                    break;
-                case 8:
+                    } else System.exit(0);
+                }
+                case 8 -> {
                     System.out.println("Choose index to update: \n");
-                    int choseNum =scanner.nextInt();
-                    for(int i= 0;i <uniqueList.size();i++){
-                        if(choseNum== i){
+                    int choseNum = scanner.nextInt() - 1;
+                    for (int i = 0; i < uniqueList.size(); i++) {
+                        if (choseNum == i) {
                             Admin.updateNews(uniqueList.get(i));
                             break;
                         }
                     }
                     System.out.println("To return enter 1 else enter 0");
                     int returnNum6 = scanner.nextInt();
-                    if(returnNum6 ==1){
+                    if (returnNum6 == 1) {
                         displayNews(user);
                         options(user);
-                    }
-                    else System.exit(0);
-                    break;
-                default:
+                    } else System.exit(0);
+                }
+                default -> {
                     displayNews(user);
                     options(user);
-                    break;
+                }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            startup();
         }
     }
     public static void displayNews(User user) {
@@ -354,9 +353,10 @@ public class Main {
                 News.allNews.remove(n);
             }
         }
-
+        fixedNews = new ArrayList<>();
         if (user.isAdmin()) {
             fixedNews.addAll(News.allNews);
+            uniqueList = fixedNews.stream().distinct().toList();
         } else {
             fixedNews.addAll(user.getPreferences().get(0).getNewsOfCategory());
             fixedNews.addAll(user.getPreferences().get(1).getNewsOfCategory());

@@ -1,15 +1,16 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.*;
 
 public class News {
     private String description;
     private String title;
-    private Date date;
     private static final ArrayList<Float> totalRates = new ArrayList<>();
     private float rate;
     private Category category;
     public static ArrayList<News> allNews = new ArrayList<>();
 
-    public static Map<String, ArrayList<News>> MappedNews;
+    public static Map<String, ArrayList<News>> MappedNews = new HashMap<>();
     private Queue<Comment> comments;
 
     public News() {
@@ -18,7 +19,6 @@ public class News {
     public News(String description, String title, Category category, Queue<Comment> comment) {
         this.description = description;
         this.title = title;
-        this.date = new Date();
         this.category = category;
         this.comments = new LinkedList<Comment>();
         ///////////////////////////////////////
@@ -27,21 +27,15 @@ public class News {
     }
 
 
-    public News(String description, String title, Category category, Queue<Comment> comment,float rate,Date date) {
+    public News(String description, String title, Category category, Queue<Comment> comment,float rate) {
         this.description = description;
         this.title = title;
-        this.date = new Date();
         this.category = category;
         this.comments = new LinkedList<Comment>();
         this.rate = rate;
-        this.date = date;
         ///////////////////////////////////////
         this.category.addNewsToRelatedCategory(this);
         News.allNews.add(this);
-    }
-
-    public void setDate() {
-        this.date = new Date();
     }
 
     public ArrayList<Float> getTotalRates() {
@@ -80,28 +74,33 @@ public class News {
         this.title = title;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
     public float getRate() {
         if (totalRates.size() != 0) {
-            for (int i = 0; i < totalRates.size(); i++) {
-                this.rate += totalRates.get(i);
+            for (Float totalRate : totalRates) {
+                this.rate += totalRate;
             }
             this.rate /= totalRates.size();
         } else this.rate = 0;
         return rate;
     }
 
-    public void addNewComment(Comment comment) {
+    public void addNewComment(Comment comment) throws Exception {
         this.comments.add(comment);
+        try {
+            Connection connection = DBConnection.connection();
+            String query = "Insert INTO news.comment (title, description, username) VALUES (?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, comment.getNewsTitle());
+            statement.setString(2, comment.getComment());
+            statement.setString(3, comment.getUsername());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            Main.startup();
+        }
     }
 
     public void displayComments() {
-        Iterator<Comment> it = this.comments.iterator();
-        while (it.hasNext()) {
-            Comment c = it.next();
+        for (Comment c : this.comments) {
             c.displayComment();
         }
     }
@@ -110,34 +109,29 @@ public class News {
         totalRates.add(rate);
     }
 
-    public void setRate() {
-        if (totalRates.size() != 0) {
-            for (int i = 0; i < totalRates.size(); i++) {
-                this.rate += totalRates.get(i);
+    public void newsToOpen (User user) throws Exception {
+        try {
+            System.out.println(this.getTitle());
+            System.out.println("\t" + this.getDescription());
+            System.out.println("Comments: \n");
+            this.displayComments();
+            System.out.println("\t" + "For rating press 1 , For comment press 2 ");
+            Scanner input = new Scanner(System.in);
+            int i = input.nextInt();
+            if (i == 1) {
+                System.out.println("Enter your rate ");
+                int userRate = input.nextInt();
+                this.addRate(userRate);
+            } else if (i == 2) {
+                System.out.println("Enter your comment");
+                String userComment = input.next();
+                this.addNewComment(new Comment(user.getUserName(), new Date(), userComment));
+                System.out.println("Added");
             }
-            this.rate /= totalRates.size();
-        } else this.rate = 0;
-    }
-    public void newsToOpen (User user) {
-        System.out.println(this.getTitle());
-        System.out.println("\t" + this.getDescription());
-        System.out.println("Comments: \n");
-        this.displayComments();
-        System.out.println( "\t" + "For rating press 1 , For comment press 2 ");
-        Scanner input = new Scanner(System.in);
-        int i = input.nextInt();
-        if(i==1){
-            System.out.println("Enter your rate ");
-            int userRate = input.nextInt();
-            this.addRate(userRate);
-        } else if (i==2) {
-            System.out.println("Enter your comment");
-            String userComment = input.next();
-            Comment comment= new Comment(user,userComment);
-            this.addNewComment(comment);
-
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            Main.startup();
         }
-
 
     }
 
