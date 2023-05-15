@@ -150,6 +150,7 @@ public class Main {
             PreparedStatement prefPsmt = connection.prepareStatement(prefSql);
             ResultSet prefResultSet = prefPsmt.executeQuery();
             while (prefResultSet.next()) {
+                System.out.println(prefResultSet.getString(1));
                 String categoryName = prefResultSet.getString(1);
                 String username = prefResultSet.getString(2);
                 for (int i = 0; i < Category.categories.size(); i++) {
@@ -162,7 +163,14 @@ public class Main {
                     }
                 }
             }
-
+            // retrieve all categories from DB
+            String catSql = "SELECT * FROM news.category";
+            PreparedStatement catPsmt = connection.prepareStatement(catSql);
+            ResultSet catResultSet = catPsmt.executeQuery();
+            while (catResultSet.next()) {
+                String categoryName = catResultSet.getString(2);
+                Category category = new Category(categoryName);
+            }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
             startup();

@@ -7,7 +7,7 @@ public class User {
     private String username;
     private String password;
     private final int age;
-    private ArrayList<Category> preferences;
+    private final ArrayList<Category> preferences;
 
     public static ArrayList<User> allUsers = new ArrayList<>();
     private boolean isAdmin;
@@ -17,7 +17,7 @@ public class User {
         this.password = password;
         this.isAdmin = isAdmin;
         this.age = age;
-
+        this.preferences = new ArrayList<>();
         allUsers.add(this);
     }
 
@@ -54,10 +54,6 @@ public class User {
 
     public ArrayList<Category> getPreferences() {
         return preferences;
-    }
-
-    public void setPreferences(ArrayList<Category> preferences) {
-        this.preferences = preferences;
     }
 
     public boolean isAdmin() {
