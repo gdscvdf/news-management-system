@@ -125,9 +125,8 @@ public class News {
         } else if (i==2) {
             System.out.println("Enter your comment");
             String userComment = input.next();
-//            User u;
-//            Comment comment(,)
-//            this.addNewComment();
+            Comment comment= new Comment(user,userComment);
+            this.addNewComment(comment);
 
         }
 
