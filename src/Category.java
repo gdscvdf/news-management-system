@@ -13,7 +13,10 @@ public class Category {
 
     public Category(String name) {
         this.name=name;
-        categories.add(this);
+    }
+
+    public ArrayList<News> getNewsOfCategory() {
+        return NewsOfCategory;
     }
 
     public void setName(String name) {
@@ -56,7 +59,11 @@ public class Category {
         categories.add(c);
     }
 
-    public void addNewsToRelatedCategory(News n ){
+    public void addNewsToCategory(News news) {
+        NewsOfCategory.add(news);
+    }
+
+    public void addNewsToRelatedCategory(News n){
         NewsOfCategory.add(n);
     }
     public void displayNewsOfCategory() {

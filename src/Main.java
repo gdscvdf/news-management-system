@@ -1,12 +1,12 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
-    private static Stack<News> fixedNews = new Stack<News>();
+    private static ArrayList<News> fixedNews = new ArrayList<>();
     public static void main(String[] arg) throws Exception {
         retrieveData();
         startup();
@@ -52,6 +52,7 @@ public class Main {
                 if (username.equals(User.allUsers.get(i).getUserName())) {
                     if (password.equals(User.allUsers.get(i).getPassword())) {
                         displayNews(User.allUsers.get(i));
+                        options(User.allUsers.get(i));
                     } else {
                         System.out.println("Invalid Password");
                         startup();
@@ -96,6 +97,7 @@ public class Main {
                 user.save();
                 user.addPreferences();
                 displayNews(user);
+                options(user);
 
             } else {
                 System.out.println("Invalid inputs.");
@@ -122,16 +124,15 @@ public class Main {
         try {
             Connection connection = DBConnection.connection();
 
-            // retrieve all users from DB
-            String userSql = "SELECT * FROM news.user";
-            PreparedStatement userPsmt = connection.prepareStatement(userSql);
-            ResultSet userResultSet = userPsmt.executeQuery();
-            while (userResultSet.next()) {
-                String username = userResultSet.getString(2);
-                String password = userResultSet.getString(3);
-                boolean isAdmin = userResultSet.getBoolean(4);
-                int age = userResultSet.getInt(5);
-                User user = new User(username, password, isAdmin, age);
+
+            // retrieve all categories from DB
+            String catSql = "SELECT * FROM news.category";
+            PreparedStatement catPsmt = connection.prepareStatement(catSql);
+            ResultSet catResultSet = catPsmt.executeQuery();
+            while (catResultSet.next()) {
+                String categoryName = catResultSet.getString(2);
+                Category category = new Category(categoryName);
+                Category.categories.add(category);
             }
             // retrieve all news from DB
             String newsSql = "SELECT * FROM news.news";
@@ -145,6 +146,24 @@ public class Main {
                 String categoryName = newsResultSet.getString(6);
                 Category category = new Category(categoryName);
                 News news = new News(description, title, category, new LinkedList<>(), rate, date);
+            }
+            // retrieve all users from DB
+            String userSql = "SELECT * FROM news.user";
+            PreparedStatement userPsmt = connection.prepareStatement(userSql);
+            ResultSet userResultSet = userPsmt.executeQuery();
+            while (userResultSet.next()) {
+                String username = userResultSet.getString(2);
+                String password = userResultSet.getString(3);
+                boolean isAdmin = userResultSet.getBoolean(4);
+                int age = userResultSet.getInt(5);
+                new User(username, password, isAdmin, age);
+            }
+            for (int i = 0; i < Category.categories.size(); i++) {
+                for (int j = 0; j < News.allNews.size(); j++) {
+                    if (News.allNews.get(j).getCategory().getName().equals(Category.categories.get(i).getName())) {
+                        Category.categories.get(i).addNewsToCategory(News.allNews.get(j));
+                    }
+                }
             }
             // retrieve all preferences from DB
             String prefSql = "SELECT * FROM news.preferences";
@@ -163,13 +182,9 @@ public class Main {
                     }
                 }
             }
-            // retrieve all categories from DB
-            String catSql = "SELECT * FROM news.category";
-            PreparedStatement catPsmt = connection.prepareStatement(catSql);
-            ResultSet catResultSet = catPsmt.executeQuery();
-            while (catResultSet.next()) {
-                String categoryName = catResultSet.getString(2);
-                Category category = new Category(categoryName);
+            ///////////
+            for (int i = 0; i < Category.categories.size(); i++) {
+                News.MappedNews.put(Category.categories.get(i).getName(), Category.categories.get(i).getNewsOfCategory());
             }
         } catch (Exception exception) {
             System.out.println(exception.getMessage());
@@ -177,13 +192,13 @@ public class Main {
         }
     }
 
-    public void options(User user) throws Exception {
+    public static void options(User user) throws Exception {
         try {
-            int choice;
+            int choice = 0;
             if(!user.isAdmin()) {
                 System.out.println("1-Choose news to comment or rate \n 2-Filter news by category \n  ");
                 System.out.println("Enter the number of option you want: \n ");
-                 choice = scanner.nextInt();
+                choice = scanner.nextInt();
             }else {
                 System.out.println("1-To comment or rate \n 2-Filter news by category \n 3-Add news \n 4-Remove news \n 5-Update news \n ");
                 choice = scanner.nextInt();
@@ -196,24 +211,22 @@ public class Main {
                     int counter = 0;
                     News chosenNews =new News() ;
                     while (iterate.hasNext()){
-                     chosenNews = iterate.next();
+                        chosenNews = iterate.next();
                         if(counter == numberOfNews)
                             break;
                         counter++;
-                       }
+                    }
                     chosenNews.newsToOpen(user);
-
-
-                        break;
+                    break;
                 case 2:
-                        String filteredCategory = Category.filterByCategory();
-                        for(int i=0 ; i<Category.categories.size(); i++){
-                            if(Category.categories.get(i).getName() == filteredCategory){
-                                Category.categories.get(i).displayNewsOfCategory();
-                                break;
-                            }
+                    String filteredCategory = Category.filterByCategory();
+                    for(int i=0 ; i<Category.categories.size(); i++){
+                        if(Category.categories.get(i).getName() == filteredCategory){
+                            Category.categories.get(i).displayNewsOfCategory();
+                            break;
                         }
-                        break;
+                    }
+                    break;
                 case 3:
                     System.out.println("Enter the description :\n ");
                     String description = scanner.next();
@@ -234,31 +247,30 @@ public class Main {
                         break;
                     }
                 case 4:
-                        String removedTitle = scanner.next();
-                        Iterator<News> it = News.allNews.iterator();
-                        while (it.hasNext()){
-                           News news = it.next();
-                           if(news.getTitle() == removedTitle ) {
-                               Admin.removeNews(news);
-                               break;
-                           }
+                    String removedTitle = scanner.next();
+                    Iterator<News> it = News.allNews.iterator();
+                    while (it.hasNext()){
+                        News news = it.next();
+                        if(news.getTitle() == removedTitle ) {
+                            Admin.removeNews(news);
+                            break;
                         }
-                        break;
+                    }
+                    break;
                 case 5:
-                        String updatedTitle = scanner.next();
-                        Iterator<News> itt = News.allNews.iterator();
-                        while (itt.hasNext()){
-                            News news = itt.next();
-                            if(news.getTitle() == updatedTitle ) {
-                                Admin.updateNews(news);
-                                break;
-                            }
+                    String updatedTitle = scanner.next();
+                    Iterator<News> itt = News.allNews.iterator();
+                    while (itt.hasNext()){
+                        News news = itt.next();
+                        if(news.getTitle() == updatedTitle ) {
+                            Admin.updateNews(news);
+                            break;
                         }
-                        break;
+                    }
+                    break;
             }
-        }
-        catch (Exception e){
-            System.out.println(" invalid input ! ");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
     public static void displayNews(User user) {
@@ -267,33 +279,22 @@ public class Main {
                 News.allNews.remove(n);
             }
         }
+        List<News> uniqueList = null;
         if (user.isAdmin()) {
-            for (News n : News.allNews)
-                fixedNews.push(n);
+            fixedNews.addAll(News.allNews);
         } else {
-            for (int i = 0; i < user.getPreferences().size(); i++) {
-                for (News n : News.allNews)
-                    if (!user.getPreferences().get(i).getName().equals(n.getCategory().getName())) {
-                        fixedNews.push(n);
-                    }
-            }
-
-            for (int i = 0; i < user.getPreferences().size(); i++) {
-                for (News n : News.allNews) {
-                    if (user.getPreferences().get(i).getName().equals(n.getCategory().getName())) {
-                        fixedNews.push(n);
-                    }
-                }
-            }
+            fixedNews.addAll(user.getPreferences().get(0).getNewsOfCategory());
+            fixedNews.addAll(user.getPreferences().get(1).getNewsOfCategory());
+            fixedNews.addAll(News.allNews);
+            uniqueList = fixedNews.stream().distinct().toList();
         }
-       Iterator<News> it = fixedNews.iterator();
-        int counter = 0;
-        while (it.hasNext()){
-            News news = it.next();
-            counter++;
-            System.out.println( counter + " - " + news.getTitle());
+        int i = 1;
+        for (News news : uniqueList) {
+            System.out.println(i + " - " + news.getTitle());
+            i++;
         }
     }
+
     public ArrayList<News> search(String keyword) {
         ArrayList<News> filteredNews = new ArrayList<>();
         for (News news : News.allNews) {

@@ -4,11 +4,12 @@ public class News {
     private String description;
     private String title;
     private Date date;
-    private static ArrayList<Float> totalRates;
+    private static final ArrayList<Float> totalRates = new ArrayList<>();
     private float rate;
     private Category category;
-//    TODO => methods
-    public static Queue<News> allNews = new LinkedList<>();
+    public static ArrayList<News> allNews = new ArrayList<>();
+
+    public static Map<String, ArrayList<News>> MappedNews;
     private Queue<Comment> comments;
 
     public News() {
