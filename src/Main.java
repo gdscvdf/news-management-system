@@ -150,7 +150,6 @@ public class Main {
             PreparedStatement prefPsmt = connection.prepareStatement(prefSql);
             ResultSet prefResultSet = prefPsmt.executeQuery();
             while (prefResultSet.next()) {
-                System.out.println(prefResultSet.getString(1));
                 String categoryName = prefResultSet.getString(1);
                 String username = prefResultSet.getString(2);
                 for (int i = 0; i < Category.categories.size(); i++) {

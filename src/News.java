@@ -112,7 +112,7 @@ public class News {
             this.rate /= totalRates.size();
         } else this.rate = 0;
     }
-    public void newsToOpen () {
+    public void newsToOpen (User user) {
         System.out.println(this.getTitle());
         System.out.println("\t" + this.getDescription());
         System.out.println( "\t" + "For rating press 1 , For comment press 2 ");
