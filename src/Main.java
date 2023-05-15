@@ -176,19 +176,37 @@ public class Main {
         }
     }
 
-    public void options() throws Exception {
+    public void options(User user) throws Exception {
         try {
-            int i = 0;
-            String description = scanner.next();
-            String title = scanner.next();
-            String name = scanner.next();
-            switch (i) {
+            int choice;
+            if(!user.isAdmin()) {
+                System.out.println("1-Choose news to comment or rate \n 2-Filter news by category \n  ");
+                System.out.println("Enter the number of option you want: \n ");
+                 choice = scanner.nextInt();
+            }else {
+                System.out.println("1-Choose news to comment or rate \n 2-Filter news by category \n 3-Add news \n 4-Remove news \n 5-Update news \n ");
+                choice = scanner.nextInt();
+            }
+            switch (choice) {
                 case 1:
-                    break;
+
+                        break;
                 case 2:
-                    Category.filterByCategory();
-                    break;
+                        String filteredCategory = Category.filterByCategory();
+                        for(int i=0 ; i<Category.categories.size(); i++){
+                            if(Category.categories.get(i).getName() == filteredCategory){
+                                Category.categories.get(i).displayNewsOfCategory();
+                                break;
+                            }
+                        }
+                        break;
                 case 3:
+                    System.out.println("Enter the description :\n ");
+                    String description = scanner.next();
+                    System.out.println("Enter the title :\n ");
+                    String title = scanner.next();
+                    System.out.println("Enter the category :\n ");
+                    String name = scanner.next();
                     for (int j = 0; j < Category.categories.size(); j++) {
                         if (name.equals(Category.categories.get(j).getName())) {
                             News news = new News(description, title, Category.categories.get(j), new LinkedList<Comment>());
@@ -201,28 +219,28 @@ public class Main {
                         }
                         break;
                     }
-            case 4:
-             String removedTitle = scanner.next();
-                Iterator<News> it = News.allNews.iterator();
-                while (it.hasNext()){
-                   News news = it.next();
-                   if(news.getTitle() == removedTitle ) {
-                       Admin.removeNews(news);
-                       break;
-                   }
-                }
-                break;
-            case 5:
-                String updatedTitle = scanner.next();
-                Iterator<News> itt = News.allNews.iterator();
-                while (itt.hasNext()){
-                    News news = itt.next();
-                    if(news.getTitle() == updatedTitle ) {
-                        Admin.updateNews(news);
+                case 4:
+                        String removedTitle = scanner.next();
+                        Iterator<News> it = News.allNews.iterator();
+                        while (it.hasNext()){
+                           News news = it.next();
+                           if(news.getTitle() == removedTitle ) {
+                               Admin.removeNews(news);
+                               break;
+                           }
+                        }
                         break;
-                    }
-                }
-                break;
+                case 5:
+                        String updatedTitle = scanner.next();
+                        Iterator<News> itt = News.allNews.iterator();
+                        while (itt.hasNext()){
+                            News news = itt.next();
+                            if(news.getTitle() == updatedTitle ) {
+                                Admin.updateNews(news);
+                                break;
+                            }
+                        }
+                        break;
             }
         }
         catch (Exception e){
