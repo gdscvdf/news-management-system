@@ -294,4 +294,13 @@ public class Main {
             System.out.println( counter + " - " + news.getTitle());
         }
     }
+    public ArrayList<News> search(String keyword) {
+        ArrayList<News> filteredNews = new ArrayList<>();
+        for (News news : News.allNews) {
+            if (news.getTitle().contains(keyword) || news.getDescription().contains(keyword)) {
+                filteredNews.add(news);
+            }
+        }
+        return filteredNews;
+    }
 }
