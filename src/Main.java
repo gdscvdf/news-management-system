@@ -6,6 +6,7 @@ import java.util.*;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
+    private static Stack<News> fixedNews = new Stack<News>();
     public static void main(String[] arg) throws Exception {
         retrieveData();
         startup();
@@ -184,11 +185,24 @@ public class Main {
                 System.out.println("Enter the number of option you want: \n ");
                  choice = scanner.nextInt();
             }else {
-                System.out.println("1-Choose news to comment or rate \n 2-Filter news by category \n 3-Add news \n 4-Remove news \n 5-Update news \n ");
+                System.out.println("1-To comment or rate \n 2-Filter news by category \n 3-Add news \n 4-Remove news \n 5-Update news \n ");
                 choice = scanner.nextInt();
             }
             switch (choice) {
                 case 1:
+                    System.out.println("Choose news to open \n ");
+                    int numberOfNews = scanner.nextInt()-1;
+                    Iterator<News> iterate = fixedNews.iterator();
+                    int counter = 0;
+                    News chosenNews =new News() ;
+                    while (iterate.hasNext()){
+                     chosenNews = iterate.next();
+                        if(counter == numberOfNews)
+                            break;
+                        counter++;
+                       }
+                    chosenNews.newsToOpen(user);
+
 
                         break;
                 case 2:
@@ -248,7 +262,6 @@ public class Main {
         }
     }
     public static void displayNews(User user) {
-        Stack<News> fixedNews = new Stack<News>();
         for (News n : News.allNews) {
             if (n.getRate() < 2 && n.getTotalRates().size() > 2) {
                 News.allNews.remove(n);
@@ -278,7 +291,7 @@ public class Main {
         while (it.hasNext()){
             News news = it.next();
             counter++;
-            System.out.println( counter + " - " + news);
+            System.out.println( counter + " - " + news.getTitle());
         }
     }
 }

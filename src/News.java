@@ -11,6 +11,9 @@ public class News {
     public static Queue<News> allNews = new LinkedList<>();
     private Queue<Comment> comments;
 
+    public News() {
+    }
+
     public News(String description, String title, Category category, Queue<Comment> comment) {
         this.description = description;
         this.title = title;
@@ -21,6 +24,7 @@ public class News {
         this.category.addNewsToRelatedCategory(this);
         News.allNews.add(this);
     }
+
 
     public News(String description, String title, Category category, Queue<Comment> comment,float rate,Date date) {
         this.description = description;
