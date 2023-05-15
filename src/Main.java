@@ -7,13 +7,14 @@ import java.util.stream.Collectors;
 public class Main {
     static Scanner scanner = new Scanner(System.in);
     private static ArrayList<News> fixedNews = new ArrayList<>();
+    static List<News> uniqueList = null;
     public static void main(String[] arg) throws Exception {
         retrieveData();
         startup();
     }
 
     public static void startup() throws Exception {
-        System.out.println("\nWelcome to News System\n");
+        System.out.println("\t\t\t\t\t\t\t\t\t\t\t\t\tWelcome to News System\n");
         System.out.println("Press 1 for login, 2 for register\n");
         try {
             boolean checker = false;
@@ -196,16 +197,39 @@ public class Main {
         try {
             int choice = 0;
             if(!user.isAdmin()) {
-                System.out.println("1-Choose news to comment or rate \n 2-Filter news by category \n  ");
-                System.out.println("Enter the number of option you want: \n ");
+                System.out.println("1-Choose news to read\n2-To comment or rate\n3-Filter news by category\n4-Enter keyword to search for news\n5-Log Out");
+                System.out.println("Enter the number of option you want: \n");
                 choice = scanner.nextInt();
             }else {
-                System.out.println("1-To comment or rate \n 2-Filter news by category \n 3-Add news \n 4-Remove news \n 5-Update news \n ");
+                System.out.println("1-Choose news to read\n2-To comment or rate\n3-Filter news by category\n4-Enter keyword to search for news\n5-Log Out\n6-Add news\n7-Remove news\n8-Update news");
                 choice = scanner.nextInt();
             }
             switch (choice) {
                 case 1:
-                    System.out.println("Choose news to open \n ");
+                    System.out.println("Choose the index of the news: \n");
+                    int chosenNum = scanner.nextInt();
+                    int count = 1;
+                    for (News news : uniqueList) {
+                        if (chosenNum==count){
+                            System.out.println(news.getTitle());
+                            System.out.println(news.getDescription());
+                            System.out.println(news.getDate());
+                            System.out.println("Comments: \n");
+                            news.displayComments();
+                            break;
+                                }
+                        count++;
+                    }
+                    System.out.println("To return enter 1 else enter 0 \n");
+                    int returnNum = scanner.nextInt();
+                    if(returnNum ==1){
+                        displayNews(user);
+                        options(user);
+                    }
+                    else System.exit(0);
+                    break;
+                case 2:
+                    System.out.println("Choose news to open \n");
                     int numberOfNews = scanner.nextInt()-1;
                     Iterator<News> iterate = fixedNews.iterator();
                     int counter = 0;
@@ -217,8 +241,15 @@ public class Main {
                         counter++;
                     }
                     chosenNews.newsToOpen(user);
+                    System.out.println("To return enter 1 else enter 0 \n");
+                    int returnNum1 = scanner.nextInt();
+                    if(returnNum1 ==1){
+                        displayNews(user);
+                        options(user);
+                    }
+                    else System.exit(0);
                     break;
-                case 2:
+                case 3:
                     String filteredCategory = Category.filterByCategory();
                     for(int i=0 ; i<Category.categories.size(); i++){
                         if(Category.categories.get(i).getName() == filteredCategory){
@@ -226,13 +257,34 @@ public class Main {
                             break;
                         }
                     }
+                    System.out.println("To return enter 1 else enter 0 \n");
+                    int returnNum2 = scanner.nextInt();
+                    if(returnNum2 ==1){
+                        displayNews(user);
+                        options(user);
+                    }
+                    else System.exit(0);
+                    break ;
+                case 4:
+                    String keyword =scanner.next();
+                    Search(keyword);
+                    System.out.println("To return enter 1 else enter 0 \n");
+                    int returnNum3 = scanner.nextInt();
+                    if(returnNum3 ==1){
+                        displayNews(user);
+                        options(user);
+                    }
+                    else System.exit(0);
                     break;
-                case 3:
-                    System.out.println("Enter the description :\n ");
+                case 5:
+                    System.exit(0);
+                    break;
+                case 6:
+                    System.out.println("Enter the description :\n");
                     String description = scanner.next();
-                    System.out.println("Enter the title :\n ");
+                    System.out.println("Enter the title :\n");
                     String title = scanner.next();
-                    System.out.println("Enter the category :\n ");
+                    System.out.println("Enter the category :\n");
                     String name = scanner.next();
                     for (int j = 0; j < Category.categories.size(); j++) {
                         if (name.equals(Category.categories.get(j).getName())) {
@@ -244,29 +296,52 @@ public class Main {
                             News news = new News(description, title, Category.categories.get(j), new LinkedList<Comment>());
                             Admin.addNews(news);
                         }
-                        break;
                     }
-                case 4:
-                    String removedTitle = scanner.next();
-                    Iterator<News> it = News.allNews.iterator();
-                    while (it.hasNext()){
-                        News news = it.next();
-                        if(news.getTitle() == removedTitle ) {
-                            Admin.removeNews(news);
-                            break;
-                        }
+                    System.out.println("To return enter 1 else enter 0");
+                    int returnNum4 = scanner.nextInt();
+                    if(returnNum4 ==1){
+                        displayNews(user);
+                        options(user);
                     }
+                    else System.exit(0);
                     break;
-                case 5:
-                    String updatedTitle = scanner.next();
-                    Iterator<News> itt = News.allNews.iterator();
-                    while (itt.hasNext()){
-                        News news = itt.next();
-                        if(news.getTitle() == updatedTitle ) {
-                            Admin.updateNews(news);
+                case 7:
+                    System.out.println("Choose index to remove: \n");
+                    int chosennum = scanner.nextInt();
+                    for(int i= 0;i <uniqueList.size();i++){
+                        if(chosennum== i){
+                            Admin.removeNews(uniqueList.get(i));
+                            break;
+                        }
+                    }System.out.println("To return enter 1 else enter 0");
+                    int returnNum5 = scanner.nextInt();
+                    if(returnNum5 ==1){
+                        displayNews(user);
+                        options(user);
+                    }
+                    else System.exit(0);
+
+                    break;
+                case 8:
+                    System.out.println("Choose index to update: \n");
+                    int choseNum =scanner.nextInt();
+                    for(int i= 0;i <uniqueList.size();i++){
+                        if(choseNum== i){
+                            Admin.updateNews(uniqueList.get(i));
                             break;
                         }
                     }
+                    System.out.println("To return enter 1 else enter 0");
+                    int returnNum6 = scanner.nextInt();
+                    if(returnNum6 ==1){
+                        displayNews(user);
+                        options(user);
+                    }
+                    else System.exit(0);
+                    break;
+                default:
+                    displayNews(user);
+                    options(user);
                     break;
             }
         } catch (Exception e) {
@@ -279,7 +354,7 @@ public class Main {
                 News.allNews.remove(n);
             }
         }
-        List<News> uniqueList = null;
+
         if (user.isAdmin()) {
             fixedNews.addAll(News.allNews);
         } else {
@@ -295,13 +370,17 @@ public class Main {
         }
     }
 
-    public ArrayList<News> search(String keyword) {
+    public static void Search(String keyword) {
         ArrayList<News> filteredNews = new ArrayList<>();
         for (News news : News.allNews) {
             if (news.getTitle().contains(keyword) || news.getDescription().contains(keyword)) {
                 filteredNews.add(news);
             }
         }
-        return filteredNews;
+        int i =1 ;
+        for(News news: filteredNews){
+            System.out.println(i + " - " + news.getTitle());
+            i++;
+        }
     }
 }
