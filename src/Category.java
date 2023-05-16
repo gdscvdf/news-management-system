@@ -38,10 +38,6 @@ public class Category {
         categories.add(c);
     }
 
-    public void addNewsToCategory(News news) {
-        NewsOfCategory.add(news);
-    }
-
     public void addNewsToRelatedCategory(News n){
         NewsOfCategory.add(n);
     }
@@ -56,7 +52,7 @@ public class Category {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Choose category from the following list:");
             displayCategory();
-            System.out.print("Enter the name of the category: ");
+            System.out.print("Enter the number of the category: ");
             return scanner.nextInt();
         } catch (Exception e) {
             System.out.println(e.getMessage());

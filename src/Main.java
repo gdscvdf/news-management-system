@@ -160,7 +160,7 @@ public class Main {
             for (int i = 0; i < Category.categories.size(); i++) {
                 for (int j = 0; j < News.allNews.size(); j++) {
                     if (News.allNews.get(j).getCategory().getName().equals(Category.categories.get(i).getName())) {
-                        Category.categories.get(i).addNewsToCategory(News.allNews.get(j));
+                        Category.categories.get(i).addNewsToRelatedCategory(News.allNews.get(j));
                     }
                 }
             }
